@@ -4,7 +4,8 @@
     <title>Rutgers Parking Pass Visualizer</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" type="text/css" href="style.css" /> 
+    <link rel="stylesheet" type="text/css" href="screen.css" media='screen'/> 
+    <link rel="stylesheet" type="text/css" href="mobile.css" media='mobile'/> 
   </head>
   <script>
     var passes = ['Busch Resident', 'Cook Resident', 'Douglass Resident', 'Livingston Resident', 'Busch Commuter', 'College Ave Commuter', 'Cook Commuter', 'Doug Commuter', 'Livingston Commuter'];
@@ -29,7 +30,7 @@
       </ul>
     </div>
     
-    <div class ="dropdown" id="CampusChoose">
+    <div class ="dropdownmulti" id="CampusChoose">
       <div class="select">
         <span class="selected">Choose Campus</span>
         <div class = "caret"></div>
@@ -84,8 +85,6 @@
         campusFilterMap.set("Douglass", dougfilter)
         campusFilterMap.set("Livingston", livifilter)
 
-        let campusFilters = [buschfilter, cafilter, cookfilter, dougfilter, livifilter];
-
         //time filters
         var alwaysfilter = [['==', 'true', ['get', 'always']]];
         var mf82filter = [['==', 'true', ['get', 'mf82']]]
@@ -111,35 +110,20 @@
         timeFilterMap.set("Friday, 4PM - Monday 8AM", f4m8filter);
         timeFilterMap.set("Friday, 6PM - Monday 8AM", f6pm8afilter);
 
-        //campus checkboxes
-        var buschcheckbox = document.getElementById('busch');
-        var cacheckbox = document.getElementById('ca');
-        var cookcheckbox = document.getElementById('cook');
-        var dougcheckbox = document.getElementById('doug');
-        var livicheckbox = document.getElementById('livi');
-        var campusChecked = buschcheckbox.checked || cacheckbox.checked || cookcheckbox.checked || dougcheckbox.checked || livicheckbox.checked;
-
-        let campusCheckboxes = [buschcheckbox, cacheckbox, cookcheckbox, dougcheckbox, livicheckbox];
-
-        //time checkboxes
-        var alwayscheckbox = document.getElementById('always');
-        var mf82checkbox = document.getElementById('mf82');
-        var mf88checkbox = document.getElementById('mf88');
-        var ss62checkbox = document.getElementById('ss62');
-        var f4m8checkbox = document.getElementById('f4m8');
-        var anycheckbox = document.getElementById('any');
-        var timeChecked = alwayscheckbox.checked || mf82checkbox.checked || mf88checkbox.checked || ss62checkbox.checked || f4m8checkbox.checked
-
-        let timeCheckboxes = [alwayscheckbox, mf82checkbox, mf88checkbox, ss62checkbox, f4m8checkbox]
        
         //list of if statements to check campus filters
         
-        campusfilter = campusfilter.concat(campusFilterMap.get(document.getElementById("CampusChoose").querySelector('.selected').innerText));
-        
+        if (chosenCampuses == null){
+        } else {
+          chosenCampuses.forEach(campus =>{
+            campusfilter = campusfilter.concat(campusFilterMap.get(campus.innerText));
+        })
+        }
+      
         //list of if statements to check time filters
         timefilter = timefilter.concat(timeFilterMap.get(document.getElementById("TimeChoose").querySelector('.selected').innerText));
 
-        const campusChosen = !(document.getElementById("CampusChoose").querySelector('.selected').innerText == 'Choose Campus');
+        const campusChosen = !(chosenCampuses == null);
         const timeChosen = !(document.getElementById("TimeChoose").querySelector('.selected').innerText == 'Choose Time(s)');
 
         if(campusChosen && !timeChosen){
@@ -159,8 +143,50 @@
         
       };
       
+      var chosenCampuses = null;
       const dropdowns = document.querySelectorAll('.dropdown');
+      const multis = document.querySelectorAll('.dropdownmulti');
       const times = document.getElementById('TimeChoose').querySelectorAll('.menu li');
+
+      multis.forEach(dropdown => {
+        const select = dropdown.querySelector('.select');
+        const caret = dropdown.querySelector('.caret');
+        const menu = dropdown.querySelector('.menu');
+        const options = dropdown.querySelectorAll('.menu li')
+        
+        select.addEventListener('click', () => {
+          select.classList.toggle('select-clicked');
+          caret.classList.toggle('caret-rotate');
+          menu.classList.toggle('menu-open');
+        });
+
+        options.forEach(option=>{
+          option.addEventListener('click', () =>{
+            
+            select.classList.remove('select-clicked');
+            caret.classList.remove('caret-rotate');
+            menu.classList.remove('menu-open');
+
+            if(option.classList.contains('active')){
+              option.classList.remove('active');
+            } else {
+              option.classList.add('active');
+            }
+
+            chosenCampuses = document.getElementById("CampusChoose").querySelectorAll('.active')
+            if (chosenCampuses.length == 1){
+              dropdown.querySelector('.selected').innerText = String(chosenCampuses.length) +  " Campus Selected";
+            } else {
+              dropdown.querySelector('.selected').innerText = String(chosenCampuses.length) +  " Campuses Selected";
+            }
+    
+            loadFilters();
+            
+        })
+      })
+      })
+
+
   
       dropdowns.forEach(dropdown => {
         const select = dropdown.querySelector('.select');
@@ -229,10 +255,8 @@
                     }
                   }
                 })
-                  
-
               } else {};
-                document.getElementById('campusForm').style.display = 'block';
+
                 document.getElementById('CampusChoose').style.display = 'block';
                 document.getElementById('TimeChoose').style.display = 'block';
 
@@ -272,112 +296,6 @@
         });
       });
     </script>
-
-    <form id="campusForm">
-    <fieldset id="campusChooser">
-      <legend>Select Campus(es)</legend>
-      <div>
-        <input type="checkbox" id="busch" name="campus" value="busch"/>
-        <label for="busch">Busch</label>
-      </div>
-      <div>
-        <input type="checkbox" id="ca" name="campus" value="ca" />
-        <label for="ca">College Ave</label>
-      </div>
-      <div>
-        <input type="checkbox" id="cook" name="campus" value="cook" />
-        <label for="cook">Cook</label>
-      </div>
-      <div>
-        <input type="checkbox" id="doug" name="campus" value="doug" />
-        <label for="doug">Douglass</label>
-      </div>
-      <div>
-        <input type="checkbox" id="livi" name="campus" value="livi" />
-        <label for="livi">Livingston</label>
-      </div>
-    </fieldset>
-    </form>
-    <form id= "timeForm">
-    <fieldset id="timeChooser">
-      <legend>Select Time</legend>
-      <div>
-        <input type="radio" id="always" name="time" value="always" />
-        <label for="always">24 hours, 7 days a week</label>
-      </div>
-      <div>
-        <input type="radio" id="mf82" name="time" value="mf82" />
-        <label for="mf82">Monday - Friday, 8PM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="mf88" name="time" value="mf88" />
-        <label for="mf88">Monday - Friday, 8PM - 8AM</label>
-      </div>
-      <div>
-        <input type="radio" id="ss62" name="time" value="ss62" />
-        <label for="ss62">Saturday & Sunday, 6AM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="f4m8" name="time" value="f4m8" />
-        <label for="f4m8">Friday, 4PM - Monday 8AM</label>
-      </div>
-      <div>
-        <input type="radio" id="any" name="time" value="any" />
-        <label for="any">Any of the Above</label>
-      </div>
-    </fieldset>
-    </form>
-    <script>
-        var timeChooser = document.getElementById('timeChooser');
-        timeChooser.addEventListener('change', function(){
-        loadFilters();
-        });
-    </script>
-    
-    <form id = "timeFormComm">
-    <fieldset id="timeChooserComm">
-      <legend>Select Time</legend>
-      <div>
-        <input type="radio" id="mf6a2a" name="timeComm" value="mf6a2a" />
-        <label for="mf6a2a">Monday - Friday, 6AM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="mf6p2a" name="timeComm" value="mf6p2a" />
-        <label for="mf6p2a">Monday - Friday, 6PM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="mf6p8a" name="timeComm" value="mf6p8a" />
-        <label for="mf6p8a">Monday - Friday, 6PM - 8AM</label>
-      </div>
-      <div>
-        <input type="radio" id="ss6a2a" name="timeComm" value="ss6a2a" />
-        <label for="ss6a2a">Saturday & Sunday, 6AM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="f6pm8a" name="timeComm" value="f6pm8a" />
-        <label for="f6pm8a">Friday, 6PM - Monday 8AM</label>
-      </div>
-      <div>
-        <input type="radio" id="mf8p2a" name="timeComm" value="mf8p2a" />
-        <label for="mf8p2a">Monday - Friday, 8PM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="mf75p2a" name="timeComm" value="mf75p2a" />
-        <label for="mf75p2a">Monday - Friday, 7:30PM - 2AM</label>
-      </div>
-      <div>
-        <input type="radio" id="anycomm" name="timeComm" value="anycomm" />
-        <label for="anycomm">Any of the Above</label>
-      </div>
-    </fieldset>
-    </form>
-    <script>
-      var timeChooserComm = document.getElementById('timeChooserComm');
-        timeChooserComm.addEventListener('change', function(){
-        loadFiltersComm();
-        });
-    </script>
-
 
     <div id="map"></div>
     <script>
