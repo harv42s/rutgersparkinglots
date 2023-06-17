@@ -141,7 +141,7 @@
 
         const campusChosen = !(document.getElementById("CampusChoose").querySelector('.selected').innerText == 'Choose Campus');
         const timeChosen = !(document.getElementById("TimeChoose").querySelector('.selected').innerText == 'Choose Time(s)');
-        
+
         if(campusChosen && !timeChosen){
           overallfilter = campusfilter
         } else if (!campusChosen && timeChosen){
@@ -151,7 +151,6 @@
         } else if (campusChosen && timeChosen){
           overallfilter = ['all', campusfilter, timefilter];
         }
-
         //set filter on selected pass
         if(activePass == null){
         } else {
@@ -298,6 +297,87 @@
         <label for="livi">Livingston</label>
       </div>
     </fieldset>
+    </form>
+    <form id= "timeForm">
+    <fieldset id="timeChooser">
+      <legend>Select Time</legend>
+      <div>
+        <input type="radio" id="always" name="time" value="always" />
+        <label for="always">24 hours, 7 days a week</label>
+      </div>
+      <div>
+        <input type="radio" id="mf82" name="time" value="mf82" />
+        <label for="mf82">Monday - Friday, 8PM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="mf88" name="time" value="mf88" />
+        <label for="mf88">Monday - Friday, 8PM - 8AM</label>
+      </div>
+      <div>
+        <input type="radio" id="ss62" name="time" value="ss62" />
+        <label for="ss62">Saturday & Sunday, 6AM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="f4m8" name="time" value="f4m8" />
+        <label for="f4m8">Friday, 4PM - Monday 8AM</label>
+      </div>
+      <div>
+        <input type="radio" id="any" name="time" value="any" />
+        <label for="any">Any of the Above</label>
+      </div>
+    </fieldset>
+    </form>
+    <script>
+        var timeChooser = document.getElementById('timeChooser');
+        timeChooser.addEventListener('change', function(){
+        loadFilters();
+        });
+    </script>
+    
+    <form id = "timeFormComm">
+    <fieldset id="timeChooserComm">
+      <legend>Select Time</legend>
+      <div>
+        <input type="radio" id="mf6a2a" name="timeComm" value="mf6a2a" />
+        <label for="mf6a2a">Monday - Friday, 6AM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="mf6p2a" name="timeComm" value="mf6p2a" />
+        <label for="mf6p2a">Monday - Friday, 6PM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="mf6p8a" name="timeComm" value="mf6p8a" />
+        <label for="mf6p8a">Monday - Friday, 6PM - 8AM</label>
+      </div>
+      <div>
+        <input type="radio" id="ss6a2a" name="timeComm" value="ss6a2a" />
+        <label for="ss6a2a">Saturday & Sunday, 6AM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="f6pm8a" name="timeComm" value="f6pm8a" />
+        <label for="f6pm8a">Friday, 6PM - Monday 8AM</label>
+      </div>
+      <div>
+        <input type="radio" id="mf8p2a" name="timeComm" value="mf8p2a" />
+        <label for="mf8p2a">Monday - Friday, 8PM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="mf75p2a" name="timeComm" value="mf75p2a" />
+        <label for="mf75p2a">Monday - Friday, 7:30PM - 2AM</label>
+      </div>
+      <div>
+        <input type="radio" id="anycomm" name="timeComm" value="anycomm" />
+        <label for="anycomm">Any of the Above</label>
+      </div>
+    </fieldset>
+    </form>
+    <script>
+      var timeChooserComm = document.getElementById('timeChooserComm');
+        timeChooserComm.addEventListener('change', function(){
+        loadFiltersComm();
+        });
+    </script>
+
 
     <div id="map"></div>
     <script>
