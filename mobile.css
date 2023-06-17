@@ -1,6 +1,5 @@
 body{
     font-family: Helvetica, sans-serif;
-    font-size: 20x;
     background: #23242a;
     min-height: 100vh;
     display: flex;
@@ -12,7 +11,7 @@ body{
   .dropdown{
     min-width: 15em;
     position: relative;
-    margin: 2em;
+    margin: 1em;
     z-index: 2
   }
   
@@ -23,7 +22,7 @@ body{
   .dropdownmulti{
     min-width: 15em;
     position: relative;
-    margin: 2em;
+    margin: 1em;
     z-index: 2
   }
 
