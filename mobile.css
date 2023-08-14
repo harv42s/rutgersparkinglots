@@ -3,16 +3,20 @@ body{
     background: #23242a;
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: start;
-    align-items: start;
+    align-items: center;
     flex-wrap: wrap;
+    font-size: 150%;
   }
   
   .dropdown{
     min-width: 15em;
+    width: 90%;
     position: relative;
     margin: 1em;
-    z-index: 2
+    z-index: 2;
+    font-size: 1em;
   }
   
   .dropdown *{
@@ -21,9 +25,11 @@ body{
 
   .dropdownmulti{
     min-width: 15em;
+    width: 90%;
     position: relative;
     margin: 1em;
-    z-index: 2
+    z-index: 2;
+    font-size: 1em;
   }
 
   .dropdownmulti *{
@@ -50,6 +56,10 @@ body{
   .select:hover{
     background: #323741;
   }
+
+  .selected{
+    font-size: 1.5em;
+  }
   
   .caret{
     width: 0;
@@ -72,8 +82,8 @@ body{
     box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
     border-radius: 0.5em;
     color: #9fa5b5;
-    position: absolute;
-    top: 3em;
+    position: relative;
+    top: 1em;
     left: 50%;
     width: 100%;
     transform: translateX(-50%);
@@ -122,4 +132,3 @@ body{
 #TimeChoose{
   display: none;
 }
-
