@@ -132,3 +132,12 @@ body{
 #TimeChoose{
   display: none;
 }
+
+.mapboxgl-popup-content{
+  font-family: Helvetica, sans-serif;
+  font-size: 3em;
+}
+
+.mapboxgl-popup-content-wrapper{
+  padding: 1%
+}
