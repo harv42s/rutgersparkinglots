@@ -123,8 +123,11 @@
         //list of if statements to check time filters
         timefilter = timefilter.concat(timeFilterMap.get(document.getElementById("TimeChoose").querySelector('.selected').innerText));
 
+        //boolean for if a campus has been chosen
         const campusChosen = !(chosenCampuses == null);
-        const timeChosen = !(document.getElementById("TimeChoose").querySelector('.selected').innerText == 'Choose Time(s)');
+
+        //boolean for if a time has been chosen
+        const timeChosen = !(document.getElementById("TimeChoose").querySelector('.selected').innerText == 'Choose Time(s)' || document.getElementById("TimeChoose").querySelector('.selected').innerText == 'Any of the Above');
 
         if(campusChosen && !timeChosen){
           overallfilter = campusfilter
